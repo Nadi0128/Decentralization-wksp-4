@@ -7,16 +7,20 @@ export async function simpleOnionRouter(nodeId: number) {
   onionRouter.use(express.json());
   onionRouter.use(bodyParser.json());
 
-  // TODO implement the status route
-  // onionRouter.get("/status", (req, res) => {});
+  // ✅ Route pour vérifier que le nœud est actif
+  onionRouter.get("/status", (req, res) => {
+    console.log(`🔵 Requête reçue sur /status du nœud Onion ${nodeId}`);
+    res.json({ status: "online", nodeId });
+  });
 
-  const server = onionRouter.listen(BASE_ONION_ROUTER_PORT + nodeId, () => {
-    console.log(
-      `Onion router ${nodeId} is listening on port ${
-        BASE_ONION_ROUTER_PORT + nodeId
-      }`
-    );
+  // ✅ Démarrage du nœud Onion
+  const port = BASE_ONION_ROUTER_PORT + nodeId;
+  const server = onionRouter.listen(port, () => {
+    console.log(`✅ Onion router ${nodeId} is listening on port ${port}`);
   });
 
   return server;
 }
+
+// 🚀 Lancer un nœud Onion avec l’ID 1 (cette ligne est essentielle)
+simpleOnionRouter(1).catch(console.error);

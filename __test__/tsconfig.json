@@ -1,13 +1,16 @@
 {
-  "exclude": ["node_modules", "build"],
+  "exclude": ["node_modules", "build", "dist", "**/__test__/**", "**/*.test.ts"],
+  
   "compilerOptions": {
     "target": "es2016",
     "lib": ["es6"],
     "module": "commonjs",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["../src/*"]
+      "@/*": ["./src/*"]
     },
+    "outDir": "./dist",
+    "rootDir": "./src",
     "resolveJsonModule": true,
     "allowJs": true,
     "esModuleInterop": true,
@@ -17,4 +20,5 @@
     "skipLibCheck": true,
     "incremental": true
   }
+  
 }
