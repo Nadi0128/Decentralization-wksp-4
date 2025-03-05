@@ -2,6 +2,7 @@
   "exclude": ["node_modules", "build", "dist", "**/__test__/**", "**/*.test.ts"],
   
   "compilerOptions": {
+    "rootDir": "./",
     "target": "es2016",
     "lib": ["es6"],
     "module": "commonjs",
@@ -10,7 +11,6 @@
       "@/*": ["./src/*"]
     },
     "outDir": "./dist",
-    "rootDir": "./src",
     "resolveJsonModule": true,
     "allowJs": true,
     "esModuleInterop": true,
