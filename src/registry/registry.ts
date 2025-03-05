@@ -6,6 +6,10 @@ console.log(" Début du lancement du registre...");
 console.log(`ℹ️ REGISTRY_PORT = ${REGISTRY_PORT}`);
 
 export type Node = { nodeId: number; pubKey: string };
+export type GetNodeRegistryBody = {
+  nodes: Node[];
+};
+
 
 export type RegisterNodeBody = {
   nodeId: number;
