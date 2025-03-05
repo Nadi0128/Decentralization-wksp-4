@@ -12,10 +12,6 @@ export type RegisterNodeBody = {
   pubKey: string;
 };
 
-export type GetNodeRegistryBody = {
-  nodes: Node[];
-};
-
 const nodes: Node[] = []; // Liste des nœuds enregistrés
 
 export async function launchRegistry() {
@@ -25,13 +21,12 @@ export async function launchRegistry() {
   _registry.use(express.json());
   _registry.use(bodyParser.json());
 
-  // Route pour vérifier le statut du registre
+  // ✅ Route /status
   _registry.get("/status", (req: Request, res: Response) => {
-    console.log(" Requête reçue sur /status");
     res.json({ status: "live" });
   });
 
-  // Route pour enregistrer un nœud
+  // ✅ Route /registerNode (enregistrement des nœuds)
   _registry.post("/registerNode", (req: Request, res: Response) => {
     const { nodeId, pubKey }: RegisterNodeBody = req.body;
 
@@ -49,7 +44,7 @@ export async function launchRegistry() {
     return res.json({ message: "Nœud enregistré avec succès", nodeId });
   });
 
-  // Route pour récupérer la liste des nœuds enregistrés
+  // ✅ Route /getNodeRegistry (récupération de la liste des nœuds)
   _registry.get("/getNodeRegistry", (req: Request, res: Response) => {
     res.json({ nodes });
   });

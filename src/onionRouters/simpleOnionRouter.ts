@@ -9,6 +9,7 @@ export async function simpleOnionRouter(nodeId: number) {
 
   let lastReceivedEncryptedMessage: string | null = null;
   let lastReceivedDecryptedMessage: string | null = null;
+  let lastMessageDestination: number | null = null;
 
   // ✅ Route /status
   onionRouter.get("/status", (req, res) => {
@@ -17,16 +18,25 @@ export async function simpleOnionRouter(nodeId: number) {
 
   // ✅ Route /message (pour recevoir un message)
   onionRouter.post("/message", (req, res) => {
-    const { message } = req.body;
-    if (!message) {
-      return res.status(400).json({ error: "Message est requis" });
+    const { message, destination } = req.body;
+
+    if (!message || destination === undefined) {
+      return res.status(400).json({ error: "Message et destination requis" });
     }
 
-    lastReceivedEncryptedMessage = message;
-    lastReceivedDecryptedMessage = message; // Simule la décryption (remplace ça plus tard)
+    console.log(` Message reçu: ${message}, à destination de ${destination}`);
 
-    console.log(`📩 Node ${nodeId} a reçu un message:`, message);
-    res.json({ message: "Message reçu avec succès" });
+    // Mettre à jour les dernières valeurs
+    lastReceivedEncryptedMessage = message;
+    lastReceivedDecryptedMessage = message; // À modifier si un décryptage est nécessaire
+    lastMessageDestination = destination;
+
+    return res.status(200).json({ status: "Message received", message });
+  });
+
+  // ✅ Route /getLastReceivedEncryptedMessage
+  onionRouter.get("/getLastReceivedEncryptedMessage", (req, res) => {
+    res.json({ result: lastReceivedEncryptedMessage });
   });
 
   // ✅ Route /getLastReceivedDecryptedMessage
@@ -34,9 +44,14 @@ export async function simpleOnionRouter(nodeId: number) {
     res.json({ result: lastReceivedDecryptedMessage });
   });
 
+  // ✅ Route /getLastMessageDestination
+  onionRouter.get("/getLastMessageDestination", (req, res) => {
+    res.json({ result: lastMessageDestination });
+  });
+
   const server = onionRouter.listen(BASE_ONION_ROUTER_PORT + nodeId, () => {
     console.log(
-      `🚀 Onion router ${nodeId} is listening on port ${BASE_ONION_ROUTER_PORT + nodeId}`
+      ` Onion router ${nodeId} is listening on port ${BASE_ONION_ROUTER_PORT + nodeId}`
     );
   });
 
